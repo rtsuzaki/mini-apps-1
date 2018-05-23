@@ -3,8 +3,10 @@ class App extends React.Component {
         super(props)
         this.state = {
             content:0,
+            inputs:{},
             F1Entries:['Name','Email','Password'],
             F2Entries:['Shipping Address Line 1',' Shipping Address Line 2','City','State','Zip Code','Phone Number'],
+            F3Entries:['Credit Card Number', 'Expiration Date','CVV','Billing Zip Code']
         }
     }
     handleCheckoutClick() {
@@ -12,10 +14,26 @@ class App extends React.Component {
         let nextContentNum = this.state.content + 1;
         this.setState({content:nextContentNum})
     }
+
+    handlePurchaseClick() {
+        console.log('handled purchase click')
+    }
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+        let newInputs = this.state.inputs
+        newInputs[name]=value
+        this.setState({
+            inputs: newInputs,
+        });
+    }
+
     render() {
         return (  
             <div>
-                <PageContent fNum={this.state.content} next={this.handleCheckoutClick.bind(this)}/>
+                <PageContent fNum={this.state.content} next={this.handleCheckoutClick.bind(this)} F1Entries={this.state.F1Entries} F2Entries={this.state.F2Entries} F3Entries={this.state.F3Entries} purchase ={this.handlePurchaseClick} handleInputChange= {this.handleInputChange.bind(this)}/>
             </div>
         )
     }
@@ -23,159 +41,45 @@ class App extends React.Component {
 window.App = App
 
 var PageContent =(props) => {
+    if (props.fNum ===1) {
+        var entries = props.F1Entries;
+    } else if (props.fNum ===2) {
+        var entries = props.F2Entries;
+    } else if (props.fNum ===3) {
+        var entries = props.F3Entries;
+    }
+
     if (props.fNum === 0) {
         return (
            <button onClick={props.next}>Checkout</button>
         )
-    } else if (props.fNum === 1) {
+    } else if (props.fNum ===4) {
         return (
             <div>
-                <F1 />
-                <button onClick={props.next}>Next</button>
+            Summary of Purchase
+            <br />
+            <button onClick={props.purchase}>Purchase</button>
             </div>
         )
-    } else if (props.fNum === 2) {
+    } else {
         return (
             <div>
-                <F2 />
+                {entries.map((entry)=> <FormEntry entryName={entry} handleInputChange={props.handleInputChange}/>)}
                 <button onClick={props.next}>Next</button>
-            </div>
-        )
-    } else if (props.fNum === 3) {
-        return (
-            <div>
-                <F3 />
-                <button onClick={props.next}>Next</button>
-            </div>
-        )
-    } else if (props.fNum === 4) {
-        return (
-            <div>
-            <button onClick={()=>{console.log('purchase')}}>Purchase</button>
             </div>
         )
     }
-
-};
-
-var F1 = (props) => {
-    return (
-        <form>
-            <label>
-            Name:
-            <input
-                name="name"
-                // onChange={this.handleInputChange} />
-                />
-            </label>
-            <br />
-            <label>
-            Email:
-            <input
-                name="email"
-                // value={this.state.numberOfGuests}
-                // onChange={this.handleInputChange} />
-                />
-            </label>
-            <label>
-            Password:
-            <input
-                name="password"
-                />
-            </label>
-        </form>
-    )
 }
 
-// var F2 = (props) => {
-//     return (
-//         <form>
-//             <label>
-//             Shipping Address Line 1:
-//             <input
-//                 name="address1"
-//                 // onChange={this.handleInputChange} />
-//                 />
-//             </label>
-//             <br />
-//             <label>
-//             Shipping Address Line 2:
-//             <input
-//                 name="address2"
-//                 // value={this.state.numberOfGuests}
-//                 // onChange={this.handleInputChange} />
-//                 />
-//             </label>
-//             <label>
-//             City:
-//             <input
-//                 name="city"
-//                 />
-//             </label>
-//             <label>
-//             State:
-//             <input
-//                 name="state"
-//                 />
-//             </label>
-//             <label>
-//             Zip Code:
-//             <input
-//                 name="zipCode"
-//                 />
-//             </label>
-//             <label>
-//             Phone Number:
-//             <input
-//                 name="phoneNumber"
-//                 />
-//             </label>
-//         </form>
-//     )
-// }
-
-// var F3 = (props) => {
-//   return (
-//     <form>
-//         <label>
-//         Credit Card #:
-//         <input
-//             name="cardNumber"
-//             // onChange={this.handleInputChange} />
-//             />
-//         </label>
-//         <br />
-//         <label>
-//         Expiration Date:
-//         <input
-//             name="expiration"
-//             // value={this.state.numberOfGuests}
-//             // onChange={this.handleInputChange} />
-//             />
-//         </label>
-//         <label>
-//         CVV:
-//         <input
-//             name="cvv"
-//             />
-//         </label>
-//         <label>
-//         Billing Zip code:
-//         <input
-//             name="billing"
-//             />
-//         </label>
-//      </form>
-//   )
-// }
-
-var formEntry = (props) => {
+var FormEntry = (props) => {
     return (
         <label>
         {props.entryName}:
         <input
-            name="billing"
+            name={props.entryName}
+            onChange={props.handleInputChange}
             />
+        <br />
         </label>
     )
 }
