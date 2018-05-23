@@ -19,20 +19,32 @@ app.get('/', function(req, res){
 
 app.post('/', function(req, res){
     // console.log(req.body)
-    let line = '';
-    let flatten = function(inputObj) {
-        let allKeys = Object.keys(inputObj);
-        for (var i = 0; i < allKeys.length; i++) {
-            if (allKeys[i] !== 'children' && i=== allKeys.length-1) {
-                line += inputObj[allKeys[i]] + '\n';
-                if (inputObj.children) {
-                    
-                }
-            } else if (allKeys[i] !== 'children') {
-                line += inputObj[allKeys[i]] + ',';
+    var flatten = function(inputObj) {
+        var allKeys = Object.keys(inputObj)
+        allKeys.splice(allKeys.indexOf('children'))
+        var csv = (allKeys.slice()).join()
+        csv+='<br />'
+        console.log('all',allKeys)
+        console.log('csv', csv)
+      
+        var innerFlatten = function(obj) {
+          for (var i = 0; i < allKeys.length; i++) {
+            if (i === allKeys.length - 1) {
+              csv+=(obj[allKeys[i]]+'<br />');
+            } else {
+              csv+=(obj[allKeys[i]]+',')
             }
+          }
+          if (obj.children.length === 0) {
+            return;
+          } else {
+            obj.children.forEach((child) => {
+              innerFlatten(child)
+            })
+          }
         }
-        return line;
+        innerFlatten(inputObj);
+        return csv;
     }
 
     res.send(flatten(req.body));

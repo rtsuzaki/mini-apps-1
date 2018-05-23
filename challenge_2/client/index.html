@@ -8,10 +8,19 @@
     <title>Document</title>
 </head>
 <body>
-    <form >
-        Test: <textarea >Enter text here...</textarea>
-    </form>
-    <button> Submit </button>
+    <h1 style="margin-left: 20px">Submit JSON To Convert To CSV: </h1>
+    <div style="margin: 20px">
+        <form >
+            <textarea id='jsonInput' rows="15" cols="60" >Enter JSON data here...</textarea>
+        </form>
+        <form style="margin-top: 20px; margin-bottom: 20px">
+            Exclude any records containing... <br>
+            <input type="text" name="firstname"><br>
+        </form>
+        <button id='submitButton'> Submit </button>
+    </div>
+    <h1 style="margin-left: 20px">CSV: </h1>
+    <table id='results' style="margin: 20px"></table>
     <script src="app.js"></script>
 </body>
 </html>
