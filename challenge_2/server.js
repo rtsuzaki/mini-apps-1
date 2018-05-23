@@ -23,14 +23,14 @@ app.post('/', function(req, res){
         var allKeys = Object.keys(inputObj)
         allKeys.splice(allKeys.indexOf('children'))
         var csv = (allKeys.slice()).join()
-        csv+='<br />'
+        csv+=',|,'
         console.log('all',allKeys)
         console.log('csv', csv)
       
         var innerFlatten = function(obj) {
           for (var i = 0; i < allKeys.length; i++) {
             if (i === allKeys.length - 1) {
-              csv+=(obj[allKeys[i]]+'<br />');
+              csv+=(obj[allKeys[i]]+',|,');
             } else {
               csv+=(obj[allKeys[i]]+',')
             }
