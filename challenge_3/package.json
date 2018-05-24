@@ -21,6 +21,8 @@
   "dependencies": {
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "body-parser": "^1.18.3",
+    "brew": "0.0.8",
     "express": "^4.16.3",
     "mongodb": "^3.1.0-beta4",
     "node": "^10.1.0",

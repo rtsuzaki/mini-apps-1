@@ -81,6 +81,12 @@ var FormEntry = (props) => {
             />
         <br />
         </label>
+        
+        // <form action="/quotes" method="POST">
+        // <input type="text" placeholder="name" name="name">
+        // <input type="text" placeholder="quote" name="quote">
+        // <button type="submit">Submit</button>
+        // </form>
     )
 }
 
