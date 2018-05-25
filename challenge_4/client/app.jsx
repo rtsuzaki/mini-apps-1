@@ -10,12 +10,12 @@ class App extends Component{
       marker: 'R',
       colPick: null,
       boardState: [
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
+        [null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null],
       ],
 
     }
@@ -38,7 +38,8 @@ class App extends Component{
     this.setState({boardState: newBoardState})
     this.checkHorizontalWin(placedRow);
     this.checkVerticalWin(colIndex);
-    this.checkDiagonalWin(placedRow,colIndex)
+    this.checkDiagonalWinDownRight(placedRow,colIndex);
+    this.checkDiagonalWinDownLeft(placedRow,colIndex);
     // this.checkTie();
 
     if (this.state.marker ==='R') {
@@ -87,11 +88,50 @@ class App extends Component{
 
   }
 
-  checkDiagonalWin(row,col) {
+  checkDiagonalWinDownRight(row,col) {
+    let j = col-row;
+    let count = 1;
+    let isWinner = false;
+    for (var i = 0; i < this.state.boardState.length; i++) {
+      if (this.state.boardState[i][j] && this.state.boardState[i][j] === this.state.boardState[i-1][j-1]) {
+        count++;
+        } else {
+        count = 1;
+        }
+        if (count === 4) {
+          isWinner = true
+        }
+      j++;
+    }
     
-    if ()
-
+    if (isWinner) {
+      alert('YOU WIN!')
+    }
+    
   }
+
+  checkDiagonalWinDownLeft(row,col) {
+    let j = col+row;
+    let count = 1;
+    let isWinner = false;
+    for (var i = 0; i < this.state.boardState.length; i++) {
+      if (this.state.boardState[i][j] && this.state.boardState[i][j] === this.state.boardState[i-1][j+1]) {
+        count++;
+        } else {
+        count = 1;
+        }
+        if (count === 4) {
+          isWinner = true
+        }
+      j--;
+    }
+    
+    if (isWinner) {
+      alert('YOU WIN!')
+    }
+    
+  }
+
 
   checkTie() {
     //check if all spaces have been filled after running the other win test.
