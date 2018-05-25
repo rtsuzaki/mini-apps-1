@@ -13,5 +13,12 @@ td {
     height:50px;
     text-align:center;
     border: 1px solid black;
-    
+}
+
+.R {
+    background-color: red;
+}
+
+.B {
+    background-color:black;
 }
