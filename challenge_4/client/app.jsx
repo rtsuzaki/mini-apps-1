@@ -1,6 +1,7 @@
 import React, { Component} from "react";
 import "./style/styles.css";
 import Board from "./board.jsx";
+import WinMessage from "./WinMessage.jsx"
 
 class App extends Component{
   constructor(props) {
@@ -8,7 +9,9 @@ class App extends Component{
     this.state = {
       // isRedsTurn:true,
       marker: 'R',
+      turns:0,
       colPick: null,
+      message: null,
       boardState: [
         [null,null,null,null,null,null,null],
         [null,null,null,null,null,null,null],
@@ -46,7 +49,8 @@ class App extends Component{
       this.setState({marker:'B'})
     } else {
       this.setState({marker:'R'})
-    }  
+    } 
+    this.setState({turns:this.state.turns+1})
   }
 
   checkHorizontalWin(rowIndex) {
@@ -65,7 +69,7 @@ class App extends Component{
     }
 
     if (isWinner) {
-      alert('YOU WIN!')
+      this.setState({message: 'YOU WIN!'})
     }
   }
   
@@ -83,7 +87,7 @@ class App extends Component{
       }
     }
     if (isWinner) {
-      alert('YOU WIN!')
+      this.setState({message: 'YOU WIN!'})
     }
 
   }
@@ -93,21 +97,23 @@ class App extends Component{
     let count = 1;
     let isWinner = false;
     for (var i = 0; i < this.state.boardState.length; i++) {
-      if (this.state.boardState[i][j] && this.state.boardState[i][j] === this.state.boardState[i-1][j-1]) {
+      if (this.state.boardState[i][j] === undefined) {
+        j++;
+      } else if (this.state.boardState[i][j] && this.state.boardState[i][j] === this.state.boardState[i-1][j-1]) {
         count++;
-        } else {
+        j++;
+      } else {
         count = 1;
-        }
-        if (count === 4) {
-          isWinner = true
-        }
-      j++;
+        j++;
+      }
+      if (count === 4) {
+        isWinner = true
+      }
     }
     
     if (isWinner) {
-      alert('YOU WIN!')
-    }
-    
+      this.setState({message: 'YOU WIN!'})
+    } 
   }
 
   checkDiagonalWinDownLeft(row,col) {
@@ -115,26 +121,30 @@ class App extends Component{
     let count = 1;
     let isWinner = false;
     for (var i = 0; i < this.state.boardState.length; i++) {
-      if (this.state.boardState[i][j] && this.state.boardState[i][j] === this.state.boardState[i-1][j+1]) {
+      if (this.state.boardState[i][j] === undefined) {
+        j--;
+      } else if (this.state.boardState[i][j] && this.state.boardState[i][j] === this.state.boardState[i-1][j+1]) {
         count++;
-        } else {
+        j--;
+      } else {
         count = 1;
-        }
-        if (count === 4) {
-          isWinner = true
-        }
-      j--;
+        j--;
+      }
+        
+      if (count === 4) {
+          isWinner = true;
+      }
     }
-    
     if (isWinner) {
-      alert('YOU WIN!')
+      this.setState({message: 'YOU WIN!'})
     }
-    
   }
 
 
   checkTie() {
-    //check if all spaces have been filled after running the other win test.
+   if (this.state.turns >= 42) {
+     this.setState({message: 'TIE GAME!'})
+   }
 
 
   }
@@ -142,6 +152,7 @@ class App extends Component{
   render(){
     return(
       <div className="App">
+        <WinMessage message={this.state.message}/>
         <Board boardState={this.state.boardState} colPick={this.state.colPick} takeTurn={this.takeTurn.bind(this)}/>
       </div>
     );

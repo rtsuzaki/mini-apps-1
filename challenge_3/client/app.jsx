@@ -6,17 +6,45 @@ class App extends React.Component {
             inputs:{},
             F1Entries:['Name','Email','Password'],
             F2Entries:['Shipping Address Line 1',' Shipping Address Line 2','City','State','Zip Code','Phone Number'],
-            F3Entries:['Credit Card Number', 'Expiration Date','CVV','Billing Zip Code']
+            F3Entries:['Credit Card Number', 'Expiration Date','CVV','Billing Zip Code'],
+            submission: {}
         }
     }
     handleCheckoutClick() {
         console.log('handled click')
         let nextContentNum = this.state.content + 1;
-        this.setState({content:nextContentNum})
+        this.setState({content:nextContentNum,submission:{}})
+        
     }
+
+    handleNextClick() {
+        console.log('handled next click')
+        let currentEntry = 'F'+this.state.content+'Entries'
+        console.log(currentEntry)
+        let tempSubmission = this.state.submission;
+        this.state[currentEntry].forEach((entry)=> {
+            console.log(this.state.inputs[entry]);
+            tempSubmission[entry] = this.state.inputs[entry]
+            this.setState({inputs:{}})
+        });
+        this.setState({submission: tempSubmission});
+        let nextContentNum = this.state.content + 1;
+        this.setState({content:nextContentNum});
+
+    }
+    
 
     handlePurchaseClick() {
         console.log('handled purchase click')
+        $.ajax({
+            type: "POST",
+            url: '/submission',
+            data: this.state.submission,
+            success: function(response) {
+                console.log('post req sent')
+            },
+            contentType: 'text',
+          });
     }
 
     handleInputChange(event) {
@@ -33,7 +61,7 @@ class App extends React.Component {
     render() {
         return (  
             <div>
-                <PageContent fNum={this.state.content} next={this.handleCheckoutClick.bind(this)} F1Entries={this.state.F1Entries} F2Entries={this.state.F2Entries} F3Entries={this.state.F3Entries} purchase ={this.handlePurchaseClick} handleInputChange= {this.handleInputChange.bind(this)}/>
+                <PageContent fNum={this.state.content} checkout={this.handleCheckoutClick.bind(this)} next={this.handleNextClick.bind(this)} F1Entries={this.state.F1Entries} F2Entries={this.state.F2Entries} F3Entries={this.state.F3Entries} purchase ={this.handlePurchaseClick.bind(this)} handleInputChange= {this.handleInputChange.bind(this)}/>
             </div>
         )
     }
@@ -51,7 +79,7 @@ var PageContent =(props) => {
 
     if (props.fNum === 0) {
         return (
-           <button onClick={props.next}>Checkout</button>
+           <button onClick={props.checkout}>Checkout</button>
         )
     } else if (props.fNum ===4) {
         return (
@@ -78,15 +106,11 @@ var FormEntry = (props) => {
         <input
             name={props.entryName}
             onChange={props.handleInputChange}
+            input type="text"
             />
         <br />
         </label>
-        
-        // <form action="/quotes" method="POST">
-        // <input type="text" placeholder="name" name="name">
-        // <input type="text" placeholder="quote" name="quote">
-        // <button type="submit">Submit</button>
-        // </form>
+    
     )
 }
 

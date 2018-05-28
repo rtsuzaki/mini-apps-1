@@ -13,15 +13,12 @@ let post = function() {
                 return el.split(',')
             })
             rows.pop();
-            console.log(rows)
             rowsCopy = rows.slice();
             for (var i = 0; i < rowsCopy.length; i++) {
                 rowsCopy[i].shift();
             }
             let list = rowsCopy.join('<br />');
-            console.log(rowsCopy)
-
-
+        
             let headers = rows[0];
             headers.forEach((el)=>{
                 $('tr').last().append(`<th style="border: 1px solid black;">${el}</th>`);
